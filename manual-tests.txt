@@ -61,4 +61,17 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected results
 * Should display "Developer" for the user name.
 
+# Module 4: Ticket 401 Only accept numeric entry
+
+## Test steps
+1. Build and run CiCo.
+2. Type the letter "a" on the keyboard
+3. Type the symbol "!" on the keyboard
+4. Type the numbers "1234"
+
+## Expected results
+* after step 2 the letter doesn't show in the entry field and beep sound happens
+* after step 3 the symbol doesn't show in the entry field and beep sound happens
+* after step 4 numbers "1234" show in entry field
+
 
