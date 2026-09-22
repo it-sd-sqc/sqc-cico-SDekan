@@ -74,4 +74,12 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 * after step 3 the symbol doesn't show in the entry field and beep sound happens
 * after step 4 numbers "1234" show in entry field
 
+# Module 5: Ticket 502 quit application when JFrame is closed
+
+## Test steps
+1. Build and run CiCo.
+2. Click close button on top right corner of CiCo application screen
+
+## Expected results
+* after step 2 application closes and "Clean shutdown" response shows in shell to show it quit the application properly.
 
