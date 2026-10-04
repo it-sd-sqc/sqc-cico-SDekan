@@ -41,31 +41,32 @@ public class Main {
     public void insertString(FilterBypass fb, int offset, String stringToAdd, AttributeSet attr)
         throws BadLocationException
     {
-      if (fb.getDocument() != null && (stringToAdd.matches("\\d+") || stringToAdd.isEmpty())) {
-        super.insertString(fb, offset, stringToAdd, attr);
-      }
-      else {
-        Toolkit.getDefaultToolkit().beep();
-      }
+      replace(fb, offset, 0, stringToAdd, attr);
     }
 
     @Override
     public void replace(FilterBypass fb, int offset, int lengthToDelete, String stringToAdd, AttributeSet attr)
         throws BadLocationException
     {
-      if (fb.getDocument() != null && (stringToAdd.matches("\\d+")  || stringToAdd.isEmpty())) {
-        super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
-      }
-      else {
+      if (fb.getDocument() == null || !(stringToAdd.matches("\\d+") || stringToAdd.isEmpty())) {
         Toolkit.getDefaultToolkit().beep();
+        return;
       }
-    }
-  }
 
-  // Lookup the card information after button press ///////////////////////////
-  public static class Update implements ActionListener {
-    public void actionPerformed(ActionEvent evt) {
-      Main.processCard();
+      // Reject digits beyond the length of a card number.
+      int newLength = fb.getDocument().getLength() - lengthToDelete + stringToAdd.length();
+      if (newLength > MAX_LENGTH) {
+        Toolkit.getDefaultToolkit().beep();
+        return;
+      }
+
+      super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+
+      // Submit automatically once the last digit has been entered. Run after
+      // the current edit finishes so the document isn't changed mid-edit.
+      if (newLength == MAX_LENGTH) {
+        SwingUtilities.invokeLater(Main::processCard);
+      }
     }
   }
 
@@ -260,12 +261,6 @@ public class Main {
     fieldNumber.setBackground(Color.green);
     fieldNumber.setForeground(Color.magenta);
     panelMain.add(fieldNumber);
-
-    JButton updateButton = new JButton("Update");
-    updateButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-    updateButton.addActionListener(new Update());
-    updateButton.setForeground(Color.green);
-    panelMain.add(updateButton);
 
     panelMain.add(Box.createVerticalGlue());
 
